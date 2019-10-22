@@ -12,7 +12,10 @@ struct ContentView: View {
     
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
-    @State private var coffeeAmount = 1
+    
+    @State private var coffeeAmount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @State private var chosenCoffeeAmount = 0
+    
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -24,8 +27,6 @@ struct ContentView: View {
             
             Form {
                 Section(header: Text("When do you want to wake up?")) {
-                    Text("When do you want to wake up?")
-                        .font(.headline)
                     
                     DatePicker("Please enter a time",
                                selection: $wakeUp,displayedComponents: .hourAndMinute)
@@ -42,12 +43,11 @@ struct ContentView: View {
                 
                 Section(header: Text("Daily coffee intake:")) {
 
-                    Stepper(value: $coffeeAmount, in: 1...20) {
-                        if coffeeAmount == 1 {
-                            Text("1 cup")
-                        } else {
-                            Text("\(coffeeAmount) cups")
+                    Picker(selection: $chosenCoffeeAmount, label: Text("# of Cups")) {
+                        ForEach(0..<coffeeAmount.count) {
+                            Text("\(self.coffeeAmount[$0])")
                         }
+                            
                     }
                 }
             }
@@ -80,7 +80,7 @@ struct ContentView: View {
         
         do {
             let prediction = try
-                model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
+                model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount[chosenCoffeeAmount]))
             
             let sleepTime = wakeUp - prediction.actualSleep
             
