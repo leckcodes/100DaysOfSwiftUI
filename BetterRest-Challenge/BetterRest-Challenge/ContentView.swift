@@ -69,8 +69,6 @@ struct ContentView: View {
                             Text("\(self.coffeeAmount[$0])")
                         }
                     }
-                    .labelsHidden()
-                    .pickerStyle(WheelPickerStyle())
                 }
                 
                 Section(header: Text("Suggested bedtime:")) {
